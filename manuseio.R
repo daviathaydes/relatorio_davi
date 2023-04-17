@@ -2,8 +2,8 @@ library(ggplot2)
 library(tidyverse)
 library(ggthemes)
 library(MetBrewer)
-library(ggplot2)
 library(googlesheets4)
+library(labelled)
 
 #### Quaest ####
 
@@ -59,6 +59,7 @@ datafolha %>%
   scale_y_continuous(labels = scales::percent_format(scale = 1))
 
 
+###### bancos unificados #####
 
 lapop_total <- bind_rows(lapop_2007,
                          lapop_2008,
@@ -70,11 +71,17 @@ lapop_total <- bind_rows(lapop_2007,
                          lapop_2021)
 
 
-
+lapop_2017$ano <- as.character(lapop_2017$ano)
+lapop_2007$ano <- as.character(lapop_2007$ano)
 lapop_2007 <- rename(lapop_2007, idio2 = IDIO2)
+lapop_2019$ano <- as.character(lapop_2019$ano)
+lapop_2019$ano <- 2018
+lapop_2017$ano <- 2016
 
 
-cores <- c("#E69F00", "#56B4E9", "#009E73")
+##### gráfico variação idio2 #####
+
+cores <- c("blue4", "aquamarine4", "darkgoldenrod")
 
 ggplot(data = lapop_total, aes(x = ano, y = percentual, color = as.factor(idio2), group = idio2)) +
   geom_line(size = 1) +
@@ -82,4 +89,161 @@ ggplot(data = lapop_total, aes(x = ano, y = percentual, color = as.factor(idio2)
   scale_colour_manual(values = cores) +
   labs(title = "Variação das respostas ao longo dos anos",
        x = "Ano", y = "Percentual", color = "Resposta")+
-  theme_minimal()
+  theme_bw()
+
+
+####### #####
+
+library(haven)
+X2138048899brazil_lapop_dims_final_2007_v5 <- read_dta("bancos/2138048899brazil_lapop_dims final 2007 v5.dta")
+
+X30541815brazil_lapop_dims_2008_final_data_set_v10 <- read_dta("bancos/30541815brazil_lapop_dims_2008_final_data_set_v10.dta")
+
+X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_set_approved_v4 <- read_dta("bancos/7948266051039660950Brazil_LAPOP_AmericasBarometer 2010 data set approved v4.dta")
+
+X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W <- read_dta("bancos/54861031Brazil LAPOP AmericasBarometer 2012 Rev1_W.dta")
+
+X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W <- read_dta("bancos/636339374Brazil LAPOP AmericasBarometer 2014 v3.0_W.dta")
+
+X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W <- read_dta("bancos/780314464Brazil LAPOP AmericasBarometer 2017 V1.0_W.dta")
+
+Brazil_LAPOP_AmericasBarometer_2019_v1_0_W <- read_dta("bancos/Brazil LAPOP AmericasBarometer 2019 v1.0_W.dta")
+
+BRA_2021_LAPOP_AmericasBarometer_v1_2_w <- read_dta("bancos/BRA_2021_LAPOP_AmericasBarometer_v1.2_w.dta")
+
+####### variável jc13 #####
+
+lapop_jc13_2006 <- X2138048899brazil_lapop_dims_final_2007_v5 %>%
+  mutate(ano="2006") %>%
+  group_by(ano, Q1, JC13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, Q1) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, Q1, resp_genero, JC13, percentual_resp_genero) %>%
+  remove_labels()
+
+lapop_jc13_2006 <- rename(lapop_jc13_2006, q1 = Q1)
+lapop_jc13_2006 <- rename(lapop_jc13_2006, jc13 = JC13)
+
+save(lapop_jc13_2006,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2006.Rda")
+
+lapop_jc13_2008 <- X30541815brazil_lapop_dims_2008_final_data_set_v10 %>%
+  mutate(ano="2008") %>%
+  group_by(ano, q1, jc13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, q1) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
+  remove_labels()
+
+save(lapop_jc13_2008,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2008.Rda")
+
+lapop_jc13_2010 <- X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_set_approved_v4 %>%
+  mutate(ano="2010") %>%
+  group_by(ano, q1, jc13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, q1) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
+  remove_labels()
+
+save(lapop_jc13_2010,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2010.Rda")
+
+lapop_jc13_2012 <- X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W %>%
+  mutate(ano="2012") %>%
+  group_by(ano, q1, jc13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, q1) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
+  remove_labels()
+
+save(lapop_jc13_2012,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2012.Rda")
+
+lapop_jc13_2014 <- X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W %>%
+  mutate(ano="2014") %>%
+  group_by(ano, q1, jc13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, q1) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
+  remove_labels()
+
+save(lapop_jc13_2014,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2014.Rda")
+
+lapop_jc13_2016 <- X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W %>%
+  mutate(ano="2016") %>%
+  group_by(ano, q1, jc13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, q1) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
+  remove_labels()
+
+save(lapop_jc13_2016,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2016.Rda")
+
+lapop_jc13_2018 <- Brazil_LAPOP_AmericasBarometer_2019_v1_0_W %>%
+  mutate(ano="2018") %>%
+  group_by(ano, q1, jc13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, q1) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
+  remove_labels()
+
+save(lapop_jc13_2018,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2018.Rda")
+
+lapop_jc13_2021 <- BRA_2021_LAPOP_AmericasBarometer_v1_2_w %>%
+  mutate(ano="2021") %>%
+  group_by(ano, q1tb, jc13) %>%
+  summarise(resp_genero = n()) %>%
+  group_by(ano, q1tb) %>% na.omit() %>%
+  mutate(total_Q1 = sum(resp_genero),
+         percentual_resp_genero = resp_genero/total_Q1*100) %>%
+  select(ano, q1tb, resp_genero, jc13, percentual_resp_genero) %>%
+  remove_labels()
+
+save(lapop_jc13_2021,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2021.Rda")
+
+lapop_jc13_2021 <- lapop_jc13_2021[-5, ]
+
+lapop_jc13_2021 <- rename(lapop_jc13_2021, q1 = q1tb)
+
+###### unificar bancos ######
+
+lapop_jc13 <- bind_rows(lapop_jc13_2006,
+                        lapop_jc13_2008,
+                        lapop_jc13_2010,
+                        lapop_jc13_2012,
+                        lapop_jc13_2014,
+                        lapop_jc13_2016,
+                        lapop_jc13_2018,
+                        lapop_jc13_2021)
+
+####### gráfico ######
+
+
+
+  ggplot(data = lapop_jc13, aes(x = ano, y = percentual_resp_genero, color =jc13, group = jc13)) +
+    geom_line(aes(linetype = factor(q1)), size = 1.1)+
+    facet_grid(~ q1, scales = "free_y")+
+    labs(title = "Variação das respostas ao longo dos anos: 1 (Homens) 2 (Mulheres).",
+         x = "Ano", y = "Percentual", color = "Opções",)+
+    theme_bw() +
+    theme(legend.spacing.y = unit(0.5, "cm"))
+
