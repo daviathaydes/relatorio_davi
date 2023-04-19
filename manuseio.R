@@ -1,9 +1,11 @@
+##### pacotes #####
 library(ggplot2)
 library(tidyverse)
 library(ggthemes)
 library(MetBrewer)
 library(googlesheets4)
 library(labelled)
+library(dplyr)
 
 #### Quaest ####
 
@@ -58,26 +60,118 @@ datafolha %>%
        title = "Pesquisas pré eleições do DataFolha e Resultados no 1º Turno")+
   scale_y_continuous(labels = scales::percent_format(scale = 1))
 
+##### LAPOP: bancos, comecando pela IDIO2 ####
+
+library(haven)
+X2138048899brazil_lapop_dims_final_2007_v5 <- read_dta("bancos/2138048899brazil_lapop_dims final 2007 v5.dta")
+
+
+lapop_2006 <- X2138048899brazil_lapop_dims_final_2007_v5  %>% rename(idio2=IDIO2) %>%
+  select(idio2) %>%  mutate(ano = "2006") %>%
+  group_by(ano, idio2) %>%
+  summarise(total_idio2 = n()) %>%
+  mutate(total_respostas = sum(total_idio2), percentual = (total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>%
+  select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>%
+  na.omit()
+
+X30541815brazil_lapop_dims_2008_final_data_set_v10 <- read_dta("bancos/30541815brazil_lapop_dims_2008_final_data_set_v10.dta")
+View(X30541815brazil_lapop_dims_2008_final_data_set_v10)
+
+lapop_2008 <- X30541815brazil_lapop_dims_2008_final_data_set_v10 %>%
+  select(idio2) %>% mutate(ano = "2008") %>% group_by(ano, idio2) %>%
+  summarise(total_idio2 = n()) %>%
+  mutate(total_respostas = sum(total_idio2), percentual = (total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>%
+  select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>%
+  na.omit()
+
+X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_set_approved_v4 <- read_dta("bancos/7948266051039660950Brazil_LAPOP_AmericasBarometer 2010 data set approved v4.dta")
+
+lapop_2010 <- X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_set_approved_v4 %>%
+  select(idio2) %>% mutate(ano = "2010") %>% group_by(ano, idio2) %>%
+  summarise(total_idio2 = n()) %>%
+  mutate(total_respostas = sum(total_idio2), percentual = (total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>%
+  select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>% na.omit()
+
+X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W <- read_dta("bancos/54861031Brazil LAPOP AmericasBarometer 2012 Rev1_W.dta")
+
+lapop_2012 <- X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W %>%
+  select(idio2) %>% mutate(ano = "2012") %>% group_by(ano, idio2) %>%
+  summarise(total_idio2=n()) %>%
+  mutate(total_respostas=sum(total_idio2), percentual=(total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>% select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>% na.omit()
+
+X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W <- read_dta("bancos/636339374Brazil LAPOP AmericasBarometer 2014 v3.0_W.dta")
+
+lapop_2014 <- X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W %>%
+  select(idio2) %>% mutate(ano = "2014") %>% group_by(ano, idio2) %>%
+  summarise(total_idio2=n()) %>%
+  mutate(total_respostas=sum(total_idio2), percentual=(total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>% select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>% na.omit()
+
+X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W <- read_dta("bancos/780314464Brazil LAPOP AmericasBarometer 2017 V1.0_W.dta")
+
+lapop_2016 <- X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W %>%
+  select(idio2) %>% mutate(ano = "2016") %>% group_by(ano, idio2) %>%
+  summarise(total_idio2=n()) %>%
+  mutate(total_respostas=sum(total_idio2), percentual=(total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>% select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>% na.omit()
+
+Brazil_LAPOP_AmericasBarometer_2019_v1_0_W <- read_dta("bancos/Brazil LAPOP AmericasBarometer 2019 v1.0_W.dta")
+
+lapop_2018 <- Brazil_LAPOP_AmericasBarometer_2019_v1_0_W %>%
+  select(idio2) %>% mutate(ano = "2018") %>% group_by(ano, idio2) %>%
+  summarise(total_idio2=n()) %>%
+  mutate(total_respostas=sum(total_idio2), percentual=(total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>% select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>% na.omit()
+
+BRA_2021_LAPOP_AmericasBarometer_v1_2_w <- read_dta("bancos/BRA_2021_LAPOP_AmericasBarometer_v1.2_w.dta")
+
+lapop_2021 <- BRA_2021_LAPOP_AmericasBarometer_v1_2_w %>%
+  select(idio2) %>% mutate(ano = "2021") %>% group_by(ano, idio2) %>%
+  summarise(total_idio2=n()) %>%
+  mutate(total_respostas=sum(total_idio2), percentual=(total_idio2/total_respostas)*100) %>%
+  select(!total_respostas) %>% select(ano, idio2, total_idio2, percentual) %>%
+  remove_labels %>% na.omit()
+
+##### salvar bancos ####
+
+save(lapop_2007,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2007.Rda")
+save(lapop_2008,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2008.Rda")
+save(lapop_2010,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2010.Rda")
+save(lapop_2012,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2012.Rda")
+save(lapop_2014,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2014.Rda")
+save(lapop_2017,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2017.Rda")
+save(lapop_2019,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2019.Rda")
+save(lapop_2021,
+     file = "~/R/relatorio_davi/bancos/idio2_lapop2021.Rda")
 
 ###### bancos unificados #####
 
-lapop_total <- bind_rows(lapop_2007,
+lapop_total <- bind_rows(lapop_2006,
                          lapop_2008,
                          lapop_2010,
                          lapop_2012,
                          lapop_2014,
-                         lapop_2017,
-                         lapop_2019,
+                         lapop_2016,
+                         lapop_2018,
                          lapop_2021)
-
-
-lapop_2017$ano <- as.character(lapop_2017$ano)
-lapop_2007$ano <- as.character(lapop_2007$ano)
-lapop_2007 <- rename(lapop_2007, idio2 = IDIO2)
-lapop_2019$ano <- as.character(lapop_2019$ano)
-lapop_2019$ano <- 2018
-lapop_2017$ano <- 2016
-
 
 ##### gráfico variação idio2 #####
 
@@ -89,27 +183,10 @@ ggplot(data = lapop_total, aes(x = ano, y = percentual, color = as.factor(idio2)
   scale_colour_manual(values = cores) +
   labs(title = "Variação das respostas ao longo dos anos",
        x = "Ano", y = "Percentual", color = "Resposta")+
-  theme_bw()
+  theme_bw()+
+  theme(legend.spacing.y = unit(0.5, "cm"))
 
 
-####### #####
-
-library(haven)
-X2138048899brazil_lapop_dims_final_2007_v5 <- read_dta("bancos/2138048899brazil_lapop_dims final 2007 v5.dta")
-
-X30541815brazil_lapop_dims_2008_final_data_set_v10 <- read_dta("bancos/30541815brazil_lapop_dims_2008_final_data_set_v10.dta")
-
-X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_set_approved_v4 <- read_dta("bancos/7948266051039660950Brazil_LAPOP_AmericasBarometer 2010 data set approved v4.dta")
-
-X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W <- read_dta("bancos/54861031Brazil LAPOP AmericasBarometer 2012 Rev1_W.dta")
-
-X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W <- read_dta("bancos/636339374Brazil LAPOP AmericasBarometer 2014 v3.0_W.dta")
-
-X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W <- read_dta("bancos/780314464Brazil LAPOP AmericasBarometer 2017 V1.0_W.dta")
-
-Brazil_LAPOP_AmericasBarometer_2019_v1_0_W <- read_dta("bancos/Brazil LAPOP AmericasBarometer 2019 v1.0_W.dta")
-
-BRA_2021_LAPOP_AmericasBarometer_v1_2_w <- read_dta("bancos/BRA_2021_LAPOP_AmericasBarometer_v1.2_w.dta")
 
 ####### variável jc13 #####
 
