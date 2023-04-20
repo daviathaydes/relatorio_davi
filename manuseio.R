@@ -12,7 +12,6 @@ library(dplyr)
 
 quaest_2 <- read_sheet("https://docs.google.com/spreadsheets/d/1ma1BonjBPOs5dvNgdNgk5JNf_FdCSheelnezjTZEt3g/edit#gid=859142516")
 
-
 quaest_2 %>%
   ggplot()+
   aes(x = data, y = amostra, group = renda, col = renda)+
@@ -39,11 +38,8 @@ ipec %>%
 
 #### pesquisas pré eleições do datafolha e resultados no 1º turno ####
 
-
 datafolha <- read_sheet("https://docs.google.com/spreadsheets/d/1m0D8YJokXbuCeEWbz5GZ0t8MSFmrdG2T1f8iD-xOrQ8/edit#gid=1024581996",
                         sheet = "dados_organizados")
-
-
 
 datafolha %>%
   ggplot() +
@@ -186,8 +182,6 @@ ggplot(data = lapop_total, aes(x = ano, y = percentual, color = as.factor(idio2)
        x = "Ano", y = "Percentual", color = "Resposta")+
   theme_bw()+
   theme(legend.spacing.y = unit(0.5, "cm"))
-
-
 
 ####### variável jc13 #####
 
@@ -335,7 +329,7 @@ save(lapop_jc13,
 
   ggplot(data = lapop_jc13, aes(x = ano, y = percentual_resp_genero, color =q1, group = q1)) +
     geom_line(aes(linetype = factor(q1)), size = 1.1)+
-    labs(title = "Variação de respaldo à golpe militar ao longo dos anos.",
+    labs(title = "Variação de respaldo à golpe militar entre homens e mulheres ao longo dos anos.",
          x = "Ano", y = "Percentual", color = "Opções",)+
     theme_bw() +
     theme(legend.spacing.y = unit(0.5, "cm"))
