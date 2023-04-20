@@ -1,4 +1,5 @@
 ##### pacotes #####
+library(ggthemes)
 library(ggplot2)
 library(tidyverse)
 library(ggthemes)
@@ -199,12 +200,14 @@ lapop_jc13_2006 <- X2138048899brazil_lapop_dims_final_2007_v5 %>%
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, Q1, resp_genero, JC13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2006 <- lapop_jc13_2006[-2,]
+lapop_jc13_2006 <- lapop_jc13_2006[-3,]
 
 lapop_jc13_2006 <- rename(lapop_jc13_2006, q1 = Q1)
 lapop_jc13_2006 <- rename(lapop_jc13_2006, jc13 = JC13)
 
 save(lapop_jc13_2006,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2006.Rda")
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2006.Rda")
 
 lapop_jc13_2008 <- X30541815brazil_lapop_dims_2008_final_data_set_v10 %>%
   mutate(ano="2008") %>%
@@ -215,9 +218,11 @@ lapop_jc13_2008 <- X30541815brazil_lapop_dims_2008_final_data_set_v10 %>%
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2008 <- lapop_jc13_2008[-2,]
+lapop_jc13_2008 <- lapop_jc13_2008[-3,]
 
 save(lapop_jc13_2008,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2008.Rda")
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2008.Rda")
 
 lapop_jc13_2010 <- X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_set_approved_v4 %>%
   mutate(ano="2010") %>%
@@ -228,9 +233,11 @@ lapop_jc13_2010 <- X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2010 <- lapop_jc13_2010[-2,]
+lapop_jc13_2010 <- lapop_jc13_2010[-3,]
 
 save(lapop_jc13_2010,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2010.Rda")
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2010.Rda")
 
 lapop_jc13_2012 <- X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W %>%
   mutate(ano="2012") %>%
@@ -241,9 +248,11 @@ lapop_jc13_2012 <- X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W %>%
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2012 <- lapop_jc13_2012[-2,]
+lapop_jc13_2012 <- lapop_jc13_2012[-3,]
 
 save(lapop_jc13_2012,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2012.Rda")
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2012.Rda")
 
 lapop_jc13_2014 <- X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W %>%
   mutate(ano="2014") %>%
@@ -254,9 +263,11 @@ lapop_jc13_2014 <- X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W %>%
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2014 <- lapop_jc13_2014[-2,]
+lapop_jc13_2014 <- lapop_jc13_2014[-3,]
 
 save(lapop_jc13_2014,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2014.Rda")
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2014.Rda")
 
 lapop_jc13_2016 <- X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W %>%
   mutate(ano="2016") %>%
@@ -267,9 +278,11 @@ lapop_jc13_2016 <- X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W %>%
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2016 <- lapop_jc13_2016[-2,]
+lapop_jc13_2016 <- lapop_jc13_2016[-3,]
 
 save(lapop_jc13_2016,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2016.Rda")
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2016.Rda")
 
 lapop_jc13_2018 <- Brazil_LAPOP_AmericasBarometer_2019_v1_0_W %>%
   mutate(ano="2018") %>%
@@ -280,9 +293,12 @@ lapop_jc13_2018 <- Brazil_LAPOP_AmericasBarometer_2019_v1_0_W %>%
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1, resp_genero, jc13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2018 <- lapop_jc13_2018[-2,]
+lapop_jc13_2018 <- lapop_jc13_2018[-3,]
+
 
 save(lapop_jc13_2018,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2018.Rda")
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2018.Rda")
 
 lapop_jc13_2021 <- BRA_2021_LAPOP_AmericasBarometer_v1_2_w %>%
   mutate(ano="2021") %>%
@@ -293,13 +309,14 @@ lapop_jc13_2021 <- BRA_2021_LAPOP_AmericasBarometer_v1_2_w %>%
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1tb, resp_genero, jc13, percentual_resp_genero) %>%
   remove_labels()
+lapop_jc13_2021 <- lapop_jc13_2021[-5, ]
+lapop_jc13_2021 <- rename(lapop_jc13_2021, q1 = q1tb)
+lapop_jc13_2021 <- lapop_jc13_2021[-2,]
+lapop_jc13_2021 <- lapop_jc13_2021[-3,]
+
 
 save(lapop_jc13_2021,
-     file = "C:/Users/davia/Desktop/relatorio_davi/bancos/lapop_jc13_2021.Rda")
-
-lapop_jc13_2021 <- lapop_jc13_2021[-5, ]
-
-lapop_jc13_2021 <- rename(lapop_jc13_2021, q1 = q1tb)
+     file = "~/R/relatorio_davi/bancos/lapop_jc13_2021.Rda")
 
 ###### unificar bancos ######
 
@@ -312,14 +329,13 @@ lapop_jc13 <- bind_rows(lapop_jc13_2006,
                         lapop_jc13_2018,
                         lapop_jc13_2021)
 
+save(lapop_jc13,
+     file = "~/R/relatorio_davi/bancos/lapop_jc13.Rda")
 ####### gráfico ######
 
-
-
-  ggplot(data = lapop_jc13, aes(x = ano, y = percentual_resp_genero, color =jc13, group = jc13)) +
+  ggplot(data = lapop_jc13, aes(x = ano, y = percentual_resp_genero, color =q1, group = q1)) +
     geom_line(aes(linetype = factor(q1)), size = 1.1)+
-    facet_grid(~ q1, scales = "free_y")+
-    labs(title = "Variação das respostas ao longo dos anos: 1 (Homens) 2 (Mulheres).",
+    labs(title = "Variação de respaldo à golpe militar ao longo dos anos.",
          x = "Ano", y = "Percentual", color = "Opções",)+
     theme_bw() +
     theme(legend.spacing.y = unit(0.5, "cm"))
