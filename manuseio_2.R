@@ -18,9 +18,11 @@ lapop_jc15a_2010 <- X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data
          percentual_resp_genero = resp_genero/total_Q1*100) %>%
   select(ano, q1, resp_genero, jc15a, percentual_resp_genero) %>%
   remove_labels()
-
 lapop_jc15a_2010 <- lapop_jc15a_2010[-2,]
     lapop_jc15a_2010 <- lapop_jc15a_2010[-3,]
+save(lapop_jc15a_2010,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos_lapop/variaveis_lapop/lapop_jc15a_2010.Rda")
+
 
 lapop_jc15a_2012 <- X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W %>%
       mutate(ano="2012") %>%
@@ -33,6 +35,9 @@ lapop_jc15a_2012 <- X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W %>%
       remove_labels()
 lapop_jc15a_2012 <- lapop_jc15a_2012[-2,]
 lapop_jc15a_2012 <- lapop_jc15a_2012[-3,]
+save(lapop_jc15a_2012,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos_lapop/variaveis_lapop/lapop_jc15a_2012.Rda")
+
 
 lapop_jc15a_2014 <- X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W %>%
   mutate(ano="2014") %>%
@@ -45,6 +50,10 @@ lapop_jc15a_2014 <- X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W %>%
   remove_labels()
 lapop_jc15a_2014 <- lapop_jc15a_2014[-2,]
 lapop_jc15a_2014 <- lapop_jc15a_2014[-3,]
+save(lapop_jc15a_2014,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos_lapop/variaveis_lapop/lapop_jc15a_2014.Rda")
+
+
 
 lapop_jc15a_2016 <- X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W %>%
   mutate(ano="2016") %>%
@@ -57,6 +66,9 @@ lapop_jc15a_2016 <- X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W %>%
   remove_labels()
 lapop_jc15a_2016 <- lapop_jc15a_2016[-2,]
 lapop_jc15a_2016 <- lapop_jc15a_2016[-3,]
+save(lapop_jc15a_2016,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos_lapop/variaveis_lapop/lapop_jc15a_2016.Rda")
+
 
 lapop_jc15a_2018 <- Brazil_LAPOP_AmericasBarometer_2019_v1_0_W %>%
   mutate(ano="2018") %>%
@@ -69,6 +81,9 @@ lapop_jc15a_2018 <- Brazil_LAPOP_AmericasBarometer_2019_v1_0_W %>%
   remove_labels()
 lapop_jc15a_2018 <- lapop_jc15a_2018[-2,]
 lapop_jc15a_2018 <- lapop_jc15a_2018[-3,]
+save(lapop_jc15a_2018,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos_lapop/variaveis_lapop/lapop_jc15a_2018.Rda")
+
 
 lapop_jc15a_2021 <- BRA_2021_LAPOP_AmericasBarometer_v1_2_w %>%
   mutate(ano="2021") %>%
@@ -84,6 +99,11 @@ lapop_jc15a_2021 <- rename(lapop_jc15a_2021, q1 = q1tb)
 lapop_jc15a_2021 <- lapop_jc15a_2021[-5,]
 lapop_jc15a_2021 <- lapop_jc15a_2021[-2,]
 lapop_jc15a_2021 <- lapop_jc15a_2021[-3,]
+
+save(lapop_jc15a_2021,
+     file = "C:/Users/davia/Desktop/relatorio_davi/bancos_lapop/variaveis_lapop/lapop_jc15a_2021.Rda")
+
+
 
 ##### unificar bancos #####
 
@@ -110,3 +130,6 @@ ggplot(data = lapop_jc15a, aes(x = ano, y = percentual_resp_genero, group = q1))
         plot.title = element_text(size = 16),  # tamanho da fonte do título do gráfico
         legend.position = "bottom"  # posição da legenda
   )
+X1_01838 <- read_sav("bancos_eseb/1_01838.sav")
+View(X1_01838)
+
