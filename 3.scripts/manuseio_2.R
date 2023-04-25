@@ -1,11 +1,12 @@
 ##### importar bancos #####
 library(haven)
-X7948266051039660950Brazil_LAPOP_AmericasBarometer_2010_data_set_approved_v4 <- read_dta("bancos/7948266051039660950Brazil_LAPOP_AmericasBarometer 2010 data set approved v4.dta")
-X54861031Brazil_LAPOP_AmericasBarometer_2012_Rev1_W <- read_dta("bancos/54861031Brazil LAPOP AmericasBarometer 2012 Rev1_W.dta")
-X636339374Brazil_LAPOP_AmericasBarometer_2014_v3_0_W <- read_dta("bancos/636339374Brazil LAPOP AmericasBarometer 2014 v3.0_W.dta")
-X780314464Brazil_LAPOP_AmericasBarometer_2017_V1_0_W <- read_dta("bancos/780314464Brazil LAPOP AmericasBarometer 2017 V1.0_W.dta")
-Brazil_LAPOP_AmericasBarometer_2019_v1_0_W <- read_dta("bancos/Brazil LAPOP AmericasBarometer 2019 v1.0_W.dta")
-BRA_2021_LAPOP_AmericasBarometer_v1_2_w <- read_dta("bancos/BRA_2021_LAPOP_AmericasBarometer_v1.2_w.dta")
+lapop
+lapop_2010 <- read_dta("bancos_lapop/7948266051039660950Brazil_LAPOP_AmericasBarometer 2010 data set approved v4.dta")
+lapop_2012 <- read_dta("bancos_lapop/54861031Brazil LAPOP AmericasBarometer 2012 Rev1_W.dta")
+lapop_2014 <- read_dta("bancos/636339374Brazil LAPOP AmericasBarometer 2014 v3.0_W.dta")
+lapop_2016 <- read_dta("bancos/780314464Brazil LAPOP AmericasBarometer 2017 V1.0_W.dta")
+lapop_2018 <- read_dta("bancos/Brazil LAPOP AmericasBarometer 2019 v1.0_W.dta")
+lapop_2021 <- read_dta("bancos/BRA_2021_LAPOP_AmericasBarometer_v1.2_w.dta")
 
 ##### Lapop - variável jc14a ####
 

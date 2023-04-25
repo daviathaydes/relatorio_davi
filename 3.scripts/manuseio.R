@@ -64,7 +64,8 @@ library(haven)
 X2138048899brazil_lapop_dims_final_2007_v5 <- read_dta("bancos_lapop/2138048899brazil_lapop_dims final 2007 v5.dta")
 
 
-lapop_2006 <- X2138048899brazil_lapop_dims_final_2007_v5  %>% rename(idio2=IDIO2) %>%
+lapop_2006 <- X2138048899brazil_lapop_dims_final_2007_v5  %>%
+  rename(idio2=IDIO2) %>%
   select(idio2) %>%  mutate(ano = "2006") %>%
   group_by(ano, idio2) %>%
   summarise(total_idio2 = n()) %>%
@@ -78,7 +79,8 @@ X30541815brazil_lapop_dims_2008_final_data_set_v10 <- read_dta("bancos_lapop/305
 View(X30541815brazil_lapop_dims_2008_final_data_set_v10)
 
 lapop_2008 <- X30541815brazil_lapop_dims_2008_final_data_set_v10 %>%
-  select(idio2) %>% mutate(ano = "2008") %>% group_by(ano, idio2) %>%
+  select(idio2) %>% mutate(ano = "2008") %>%
+  group_by(ano, idio2) %>%
   summarise(total_idio2 = n()) %>%
   mutate(total_respostas = sum(total_idio2), percentual = (total_idio2/total_respostas)*100) %>%
   select(!total_respostas) %>%
