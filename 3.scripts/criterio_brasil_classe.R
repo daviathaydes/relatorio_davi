@@ -1,7 +1,9 @@
 #
 
 # 1. Carregar pacotes
-
+library(ggplot2)
+library(dplyr)
+library(pacman)
 pacman::p_load(tidyverse, haven)
 
 # 2. Abrir bancos ----
@@ -25,6 +27,13 @@ lapop_2018_filtrado <- lapop_2018 %>%
 
 # criar categorias de classes de acordo com o criterio renda brasil
 
+lapop_2018_teste <- lapop_2018_filtrado %>%
+  mutate(lapop_2018_filtrado, classe = if_else(criterio_brasil %in% c(0:16), "D",
+                                               ifelse(criterio_brasil %in% c(17:28), "C",
+                                                      ifelse(criterio_brasil %in% c(29:44), "B",
+                                                             ifelse(criterio_brasil %in% c(45:100), "A", NA)))))
+
+
 # Criar categorias de escolaridade de acordo com o criterio renda brasil
 
 lapop_2018_filtrado <- lapop_2018_filtrado %>%
@@ -45,19 +54,20 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
                                          escolaridade == "Superior completo" ~ 7),
          criterio_brasil = renda_brasil + pontos_escolaridade)
 
+# boxplot
 
-lapop_2018_filtrado %>%
+lapop_2018_teste %>%
   ggplot()+
-  aes(x = as_factor(q1), y = criterio_brasil)+
-  #geom_jitter(alpha = 0.7, size = 2)+
-  geom_boxplot(alpha= 0.6, size = 2)
-  # stat_summary(fun=mean, geom="point", shape=20, size=8, color="red",
-  #              position = position_dodge2(0.75), show.legend = FALSE)#+
-  #scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))+
-  # labs(title = "Classe de consumo e Escolaridade por Gênero",
-  #      caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
-  #      y = "Renda Brasil",
-  #      fill = "")
+  aes(x = as_factor(q1), y = classe)+
+  geom_jitter(alpha = 0.7, size = 2)+
+  geom_boxplot(alpha= 0.6, size = 2)+
+   stat_summary(fun=mean, geom="point", shape=20, size=8, color="red",
+                position = position_dodge2(0.75), show.legend = FALSE)+
+  scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))+
+   labs(title = "Classe de consumo e Escolaridade por Gênero",
+        caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
+        y = "Renda Brasil",
+        fill = "")
 
 
 lapop_2018_filtrado %>%
@@ -65,40 +75,18 @@ lapop_2018_filtrado %>%
   aes(x = as_factor(q1), y = criterio_brasil)+
   geom_density()
 
+# histogram
 
+lapop_2018_filtrado %>%
+  ggplot()+
+  aes(x= renda_brasil)+
+geom_histogram(bins = 30,  fill = "gray", color = "black")+
+  labs(x = "Renda Brasil", y = "Contagem")+
+  theme_bw()
 
+# dotplot
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ggplot(lapop_2018_teste, aes(x = classe, fill = q1)) +
+  geom_dotplot( stackdir = "center", dotsize = 0.1, binwidth = 0.3) +
+  labs(x = "Classe", y = "Contagem", fill = "Gênero") +
+  theme_classic()
