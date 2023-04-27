@@ -1,6 +1,7 @@
 #
 
 # 1. Carregar pacotes
+library(labelled)
 library(ggplot2)
 library(dplyr)
 library(pacman)
@@ -25,7 +26,33 @@ lapop_2018_filtrado <- lapop_2018 %>%
          r7, r8, r12, r14, r15, r16, r18) %>%
   na.omit() # 1342 obs
 
+
+## com pol1
+
+lapop_2018_filtrado_1 <- lapop_2018 %>%
+  select(ed, q1, wave, q10new, r1, r3, r4, r4a, r5, r6,
+         r7, r8, r12, r14, r15, r16, r18, pol1) %>%
+  na.omit() # 1342 obs
+
+
 # criar categorias de classes de acordo com o criterio renda brasil
+
+lapop_2018_teste_2 <- lapop_2018_filtrado_1 %>%
+  mutate(lapop_2018_filtrado, classe = if_else(criterio_brasil %in% c(0:16), "D",
+                                               ifelse(criterio_brasil %in% c(17:28), "C",
+                                                      ifelse(criterio_brasil %in% c(29:44), "B",
+                                                             ifelse(criterio_brasil %in% c(45:100), "A", NA)))))
+
+
+lapop_2018_pol1_teste <- lapop_2018_teste_2 %>%
+  group_by(wave, q1, pol1, classe) %>%
+  summarise(resp_genero = n())%>%
+  group_by(wave, q1) %>% na.omit() %>%
+  mutate(total_q1 = sum(resp_genero),
+         percentual_genero = resp_genero/total_q1*100) %>%
+  select(wave, q1, resp_genero, pol1, percentual_genero, classe) %>%
+  remove_labels()
+
 
 lapop_2018_teste <- lapop_2018_filtrado %>%
   mutate(lapop_2018_filtrado, classe = if_else(criterio_brasil %in% c(0:16), "D",
@@ -33,8 +60,27 @@ lapop_2018_teste <- lapop_2018_filtrado %>%
                                                       ifelse(criterio_brasil %in% c(29:44), "B",
                                                              ifelse(criterio_brasil %in% c(45:100), "A", NA)))))
 
+# porcentagem de interesse por politica por genero
+
+lapop_2018_pol1 <- lapop_2018_filtrado_1 %>%
+  mutate(ano="2018") %>%
+  group_by(ano, q1, pol1) %>%
+  summarise(resp_genero = n())%>%
+  group_by(ano, q1) %>% na.omit() %>%
+  mutate(total_q1 = sum(resp_genero),
+         percentual_genero = resp_genero/total_q1*100) %>%
+  select(ano, q1, resp_genero, pol1, percentual_genero) %>%
+  remove_labels()
+
 
 # Criar categorias de escolaridade de acordo com o criterio renda brasil
+
+lapop_2018_filtrado_1 <- lapop_2018_filtrado_1 %>%
+  mutate(escolaridade = ifelse(ed %in% c(0, 1, 2, 3), "Fundamental I incompleto",
+                               ifelse(ed %in% c(4, 5, 6), "Fundametal II incompleto",
+                                      ifelse(ed %in% c(7, 8, 9, 10), "Ensino Médio incompleto",
+                                             ifelse(ed %in% c(11, 12, 13, 14, 15), "Superior incompleto",
+                                                    ifelse(ed %in% c(16, 17), "Superior completo", NA))))))
 
 lapop_2018_filtrado <- lapop_2018_filtrado %>%
   mutate(escolaridade = ifelse(ed %in% c(0, 1, 2, 3), "Fundamental I incompleto",
@@ -42,6 +88,18 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
                                       ifelse(ed %in% c(7, 8, 9, 10), "Ensino Médio incompleto",
                                              ifelse(ed %in% c(11, 12, 13, 14, 15), "Superior incompleto",
                                                     ifelse(ed %in% c(16, 17), "Superior completo", NA))))))
+
+lapop_2018_filtrado_1 <- lapop_2018_filtrado %>%
+  mutate(renda_brasil = (r1*2) + (r3*2) + r4 + r4a + (r5*4) + (r6*3) +
+           (r7*2) + r8 + (r12*4) + (r14*3) + (r15*3) + (r16*3) +
+           (r18*2),
+         pontos_escolaridade = case_when(escolaridade == "Fundamental I incompleto" ~ 0,
+                                         escolaridade == "Fundametal II incompleto" ~ 1,
+                                         escolaridade == "Ensino Médio incompleto" ~ 2,
+                                         escolaridade == "Superior incompleto" ~ 4,
+                                         escolaridade == "Superior completo" ~ 7),
+         criterio_brasil = renda_brasil + pontos_escolaridade)
+
 
 lapop_2018_filtrado <- lapop_2018_filtrado %>%
   mutate(renda_brasil = (r1*2) + (r3*2) + r4 + r4a + (r5*4) + (r6*3) +
@@ -55,6 +113,30 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
          criterio_brasil = renda_brasil + pontos_escolaridade)
 
 # boxplot
+
+
+lapop_2018_filtrado_1%>%
+  ggplot()+
+  aes(x = as_factor(q1), y = classe)+
+  geom_jitter(alpha = 0.7, size = 2)+
+  geom_boxplot(alpha= 0.6, size = 2)+
+  stat_summary(fun=mean, geom="point", shape=20, size=8, color="red",
+               position = position_dodge2(0.75), show.legend = FALSE)+
+  scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))+
+  labs(title = "Classe de consumo e Escolaridade por Gênero",
+       caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
+       y = "Renda Brasil",
+       fill = "")
+
+## facets
+
+lapop_2018_pol1_teste %>%
+  ggplot()+
+  aes(x = (pol1), y = (percentual_genero),  fill = q1)+
+geom_bar(stat = "identity", position = "dodge")+
+facet_wrap(~ classe, ncol = 4)+
+  theme_bw()
+
 
 lapop_2018_teste %>%
   ggplot()+
