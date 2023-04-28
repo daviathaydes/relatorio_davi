@@ -1,6 +1,7 @@
 #
 
 # 1. Carregar pacotes ----
+
 pacman::p_load(tidyverse, haven, labelled)
 
 ## 1.2. Abrir bancos ----
@@ -89,74 +90,49 @@ lapop_2018_pol1_teste <- lapop_2018_filtrado %>%
   filter_at(vars(pol1, classe),all_vars(!is.na(.))) %>% # var pol1 tem muitos NAs
   group_by(q1, pol1, classe) %>%
   summarise(total_genero_pol1 = n()) %>%
-  group_by(q1) %>%
-  mutate(total_genero = sum(total_genero_pol1)) %>%
-  ungroup() %>%
-  mutate(total = sum(total_genero_pol1),
-         percentual_genero = total_genero/total*100) #%>%
-  select(q1, resp_genero, pol1, percentual_genero, classe) %>%
-  remove_labels()
+  mutate(total_genero = sum(total_genero_pol1),
+         percentual_genero = total_genero_pol1/total_genero*100)
 
 
 
-# porcentagem de interesse por politica por genero
+## 3.4.1 criar grafico
 
-lapop_2018_pol1 <- lapop_2018_filtrado_1 %>%
-  mutate(ano="2018") %>%
-  group_by(ano, q1, pol1) %>%
-  summarise(resp_genero = n())%>%
-  group_by(ano, q1) %>% na.omit() %>%
-  mutate(total_q1 = sum(resp_genero),
-         percentual_genero = resp_genero/total_q1*100) %>%
-  select(ano, q1, resp_genero, pol1, percentual_genero) %>%
-  remove_labels()
-
-
-# Criar categorias de escolaridade de acordo com o criterio renda brasil
-
-
-
-
-
-
-
-lapop_2018_filtrado <- lapop_2018_filtrado %>%
-  mutate(renda_brasil = (r1*2) + (r3*2) + r4 + r4a + (r5*4) + (r6*3) +
-                           (r7*2) + r8 + (r12*4) + (r14*3) + (r15*3) + (r16*3) +
-                           (r18*2),
-         pontos_escolaridade = case_when(escolaridade == "Fundamental I incompleto" ~ 0,
-                                         escolaridade == "Fundametal II incompleto" ~ 1,
-                                         escolaridade == "Ensino Médio incompleto" ~ 2,
-                                         escolaridade == "Superior incompleto" ~ 4,
-                                         escolaridade == "Superior completo" ~ 7),
-         criterio_brasil = renda_brasil + pontos_escolaridade)
-
-# boxplot
-
-
-
-## facets
-
+# opcao de grafico sem recategorizar o interesse por poltiica
 lapop_2018_pol1_teste %>%
+  filter(pol1 >=3) %>%
   ggplot()+
-  aes(x = (pol1), y = (percentual_genero),  fill = q1)+
-geom_bar(stat = "identity", position = "dodge")+
-facet_wrap(~ classe, ncol = 4)+
+  aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(pol1))+
+ geom_bar(stat = "identity", position = "dodge")+
+  scale_fill_manual(values = c('#66c2a5','#fc8d62'))+
+ facet_wrap(~ classe, ncol = 4)+
   theme_bw()
 
 
-lapop_2018_teste %>%
+# opcao de grafico com recategorias de interesse por poltiica
+# ficou melhor
+
+lapop_2018_pol1_teste %>%
+  mutate(pol1_binario = case_when(pol1 == 1 ~ 1, # tem interesse por politica
+                                  pol1 == 2 ~ 1, # tem interesse por politica
+                                  pol1 == 3 ~ 0, # nao tem interesse por politica
+                                  pol1 == 4 ~ 0,)) %>% # nao tem interesse por politica
   ggplot()+
-  aes(x = as_factor(q1), y = classe)+
-  geom_jitter(alpha = 0.7, size = 2)+
-  geom_boxplot(alpha= 0.6, size = 2)+
-   stat_summary(fun=mean, geom="point", shape=20, size=8, color="red",
-                position = position_dodge2(0.75), show.legend = FALSE)+
-  scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))+
-   labs(title = "Classe de consumo e Escolaridade por Gênero",
-        caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
-        y = "Renda Brasil",
-        fill = "")
+  aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(pol1_binario))+
+  geom_bar(stat = "identity", position = "dodge")+
+  scale_fill_manual(values = c('#66c2a5','#fc8d62'))+
+  facet_wrap(~ classe, ncol = 4)+
+  theme_bw() +
+  labs(title = "Interesse por politica de acordo com gênero e classe - 2018",
+       caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
+       y = "Percentual", x = "",
+       fill = "")+
+  theme_bw()
+
+
+
+
+
+
 
 
 lapop_2018_filtrado %>%
