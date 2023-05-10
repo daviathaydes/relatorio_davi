@@ -1,7 +1,4 @@
-#
-
 # 1. Carregar pacotes ----
-
 pacman::p_load(tidyverse, haven, labelled)
 
 ## 1.2. Abrir bancos ----
@@ -14,8 +11,6 @@ pacman::p_load(tidyverse, haven, labelled)
 #lapop_2016 <- read_dta("bancos_lapop/lapop_2016.dta")
 lapop_2018 <- read_dta("1.bancos/bancos_lapop/lapop_2018.dta")
 lapop_2021 <- read_dta("1.bancos/bancos_lapop/lapop_2021.dta")
-
-
 
 # 2.0 Filtrar e selecionar banco ----
 
@@ -58,7 +53,7 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
                                                              ifelse(criterio_brasil %in% c(45:100), "A", NA)))))
 
 
-### 3.3.1 Histograma da variável Renda Brasil
+### 3.3.1 Histograma da variável Renda Brasil ----
 
 lapop_2018_filtrado %>%
   ggplot()+
@@ -67,20 +62,19 @@ lapop_2018_filtrado %>%
   labs(x = "Renda Brasil", y = "Contagem")+
   theme_bw()
 
-## 3.3.2 Boxplot - variável critério brasil ----
+### 3.3.2 Boxplot - variável critério brasil ----
 
 lapop_2018_filtrado %>%
   filter(!is.na(classe)) %>%
   ggplot()+
   aes(x = criterio_brasil, y = classe, fill = as_factor(q1))+
-  geom_jitter(alpha = 0.3, size = 2)+
+  geom_jitter(alpha = 0.4, size = 2)+
   geom_boxplot(alpha= 1.0, size = 1)+
   stat_summary(fun=mean, geom="point", shape=20, size=4, color="red",
                position = position_dodge2(0.75), show.legend = FALSE)+
   scale_fill_manual(values = c('#66c2a5','#fc8d62','#8da0cb'))+
-  labs(title = "Capacidade de consumo por Gênero e Classe - 2018",
-       caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
-       y = "Renda Brasil",
+  labs(
+       y = "Classe",
        fill = "")+
   theme_bw()
 
@@ -95,7 +89,7 @@ lapop_2018_pol1_teste <- lapop_2018_filtrado %>%
 
 
 
-## 3.4.1 criar grafico
+### 3.4.1 criar grafico ----
 
 # opcao de grafico sem recategorizar o interesse por poltiica
 lapop_2018_pol1_teste %>%
@@ -119,7 +113,9 @@ lapop_2018_pol1_teste %>%
   ggplot()+
   aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(pol1_binario))+
   geom_bar(stat = "identity", position = "dodge")+
-  scale_fill_manual(values = c('#66c2a5','#fc8d62'))+
+  scale_fill_manual(values = c('#66c2a5','#fc8d62'),
+                    name = "Interesse por política",
+                    labels = c("Nada ou pouco", "Algo ou muito"))+
   facet_wrap(~ classe, ncol = 4)+
   theme_bw() +
   labs(title = "Interesse por politica de acordo com gênero e classe - 2018",
@@ -129,13 +125,13 @@ lapop_2018_pol1_teste %>%
   theme_bw()
 
 
+####
 
 
 
 
 
-
-lapop_2018_filtrado %>%
+#lapop_2018_filtrado %>%
   ggplot()+
   aes(x = as_factor(q1), y = criterio_brasil)+
   geom_density()
