@@ -16,7 +16,7 @@ lapop_2021 <- read_dta("1.bancos/bancos_lapop/lapop_2021.dta")
 
 lapop_2018_filtrado <- lapop_2018 %>%
   select(ed, q1, wave, q10new, r1, r3, r4, r4a, r5, r6,
-         r7, r8, r12, r14, r15, r16, r18, pol1)
+         r7, r8, r12, r14, r15, r16, r18, pol1, jc16a)
 
 
 # 3.0 criar categorias de classes de acordo com o criterio renda brasil ----
@@ -117,15 +117,53 @@ lapop_2018_pol1_teste %>%
                     name = "Interesse por política",
                     labels = c("Nada ou pouco", "Algo ou muito"))+
   facet_wrap(~ classe, ncol = 4)+
-  theme_bw() +
-  labs(title = "Interesse por politica de acordo com gênero e classe - 2018",
-       caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
+  labs(caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
        y = "Percentual", x = "",
        fill = "")+
-  theme_bw()
+  theme_bw()+
+  theme(
+    axis.text = element_text(size = 12),  # tamanho da fonte dos rótulos dos eixos
+    axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
+    legend.title = element_text(size = 14), # tamanho do título da legenda
+    legend.text = element_text(size = 14), # tamanho do texto da legenda
+    plot.caption = element_text(size = 12) # tamanho do texto de rodapé
+  )
 
 
-####
+## 3.5 atitude/apoio a democracia - presidente governar sem o STF ----
+
+lapop_2018_jc16a_teste <- lapop_2018_filtrado %>%
+  filter_at(vars(jc16a, classe),all_vars(!is.na(.))) %>% #
+  group_by(q1, jc16a, classe) %>%
+  summarise(total_genero_jc16a = n()) %>%
+  mutate(total_genero = sum(total_genero_jc16a),
+         percentual_genero = total_genero_jc16a/total_genero*100)
+
+lapop_2018_jc16a_teste %>% ggplot()+
+  aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(jc16a))+
+  geom_bar(stat = "identity", position = "dodge")+
+  scale_fill_manual(values = c('#8e9b79','darkslategray4'),
+                    name = "Dissolucao do STF",
+                    labels = c("Sim, justifica-se", "Nao, nao se justifica"))+
+  facet_wrap(~ classe, ncol = 4)+
+  labs(
+      # caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
+       y = "Percentual", x = "",
+       fill = "")+
+  theme_bw()+
+  theme(
+        axis.text = element_text(size = 12),  # tamanho da fonte dos rótulos dos eixos
+        axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
+        legend.title = element_text(size = 14), # tamanho do título da legenda
+        legend.text = element_text(size = 14), # tamanho do texto da legenda
+     #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
+  )
+
+
+##
+
+
+
 
 
 

@@ -84,8 +84,6 @@ lapop_2016 <- read_dta("1.bancos/bancos_lapop/lapop_2016.dta")
 lapop_2018 <- read_dta("1.bancos/bancos_lapop/lapop_2018.dta")
 lapop_2021 <- read_dta("1.bancos/bancos_lapop/lapop_2021.dta")
 
-
-
 # 5. Filtrar bancos, selecionando as variáveis ----
 ## 5.1. Variável IDIO2 ----
 ### 5.1.1 Filtrar nos bancos ----
