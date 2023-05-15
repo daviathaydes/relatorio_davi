@@ -1,5 +1,5 @@
 # 1. Carregar pacotes ----
-pacman::p_load(tidyverse, haven, labelled)
+pacman::p_load(tidyverse, haven, ggplot2, ggthemes, MetBrewer, googlesheets4, labelled, dplyr)
 
 ## 1.2. Abrir bancos ----
 
@@ -18,6 +18,8 @@ lapop_2018_filtrado <- lapop_2018 %>%
   select(ed, q1, wave, q10new, r1, r3, r4, r4a, r5, r6,
          r7, r8, r12, r14, r15, r16, r18, pol1, jc16a)
 
+recategorizacao <- c("Homem", "Mulher")
+lapop_2018_filtrado$q1 <- factor(lapop_2018_filtrado$q1, levels = c(1, 2), labels = recategorizacao)
 
 # 3.0 criar categorias de classes de acordo com o criterio renda brasil ----
 
@@ -122,7 +124,7 @@ lapop_2018_pol1_teste %>%
        fill = "")+
   theme_bw()+
   theme(
-    axis.text = element_text(size = 12),  # tamanho da fonte dos rótulos dos eixos
+    axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
     axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
     legend.title = element_text(size = 14), # tamanho do título da legenda
     legend.text = element_text(size = 14), # tamanho do texto da legenda
@@ -152,13 +154,12 @@ lapop_2018_jc16a_teste %>% ggplot()+
        fill = "")+
   theme_bw()+
   theme(
-        axis.text = element_text(size = 12),  # tamanho da fonte dos rótulos dos eixos
+        axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
         axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
         legend.title = element_text(size = 14), # tamanho do título da legenda
         legend.text = element_text(size = 14), # tamanho do texto da legenda
      #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
   )
-
 
 ##
 
