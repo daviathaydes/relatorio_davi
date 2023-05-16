@@ -16,7 +16,7 @@ lapop_2021 <- read_dta("1.bancos/bancos_lapop/lapop_2021.dta")
 
 lapop_2018_filtrado <- lapop_2018 %>%
   select(ed, q1, wave, q10new, r1, r3, r4, r4a, r5, r6,
-         r7, r8, r12, r14, r15, r16, r18, pol1, jc16a)
+         r7, r8, r12, r14, r15, r16, r18, pol1, jc10, jc16a )
 
 recategorizacao <- c("Homem", "Mulher")
 lapop_2018_filtrado$q1 <- factor(lapop_2018_filtrado$q1, levels = c(1, 2), labels = recategorizacao)
@@ -49,10 +49,10 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
 # Vamos deixar até a classe D ou apenas até a C?
 
 lapop_2018_filtrado <- lapop_2018_filtrado %>%
-  mutate(lapop_2018_filtrado, classe = if_else(criterio_brasil %in% c(0:16), "D",
-                                               ifelse(criterio_brasil %in% c(17:28), "C",
-                                                      ifelse(criterio_brasil %in% c(29:44), "B",
-                                                             ifelse(criterio_brasil %in% c(45:100), "A", NA)))))
+  mutate(lapop_2018_filtrado, classe = if_else(criterio_brasil %in% c(0:16), "Classe D",
+                                               ifelse(criterio_brasil %in% c(17:28), "Classe C",
+                                                      ifelse(criterio_brasil %in% c(29:44), "Classe B",
+                                                             ifelse(criterio_brasil %in% c(45:100), "Classe A", NA)))))
 
 
 ### 3.3.1 Histograma da variável Renda Brasil ----
@@ -78,7 +78,16 @@ lapop_2018_filtrado %>%
   labs(
        y = "Classe",
        fill = "")+
-  theme_bw()
+  theme_bw()+
+  theme(
+    axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
+    axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
+    legend.title = element_text(size = 14), # tamanho do título da legenda
+    legend.text = element_text(size = 14), # tamanho do texto da legenda
+    #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
+  )
+
+
 
 ## 3.4 Gráfico de barras - interesse por política, classe e genero ----
 
@@ -115,20 +124,21 @@ lapop_2018_pol1_teste %>%
   ggplot()+
   aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(pol1_binario))+
   geom_bar(stat = "identity", position = "dodge")+
-  scale_fill_manual(values = c('#66c2a5','#fc8d62'),
-                    name = "Interesse por política",
-                    labels = c("Nada ou pouco", "Algo ou muito"))+
+  scale_fill_manual(values = c('#8e9b79','#fc8d62'),
+                    name = "Interesse por política:",
+                    labels = c("Nada ou pouco.", "Algo ou muito."))+
   facet_wrap(~ classe, ncol = 4)+
-  labs(caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
+  labs(
        y = "Percentual", x = "",
        fill = "")+
   theme_bw()+
   theme(
     axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
-    axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
-    legend.title = element_text(size = 14), # tamanho do título da legenda
-    legend.text = element_text(size = 14), # tamanho do texto da legenda
-    plot.caption = element_text(size = 12) # tamanho do texto de rodapé
+    axis.title = element_text(size = 14),  # tamanho da fonte dos títulos dos eixos
+    legend.title = element_text(size = 12), # tamanho do título da legenda
+    legend.text = element_text(size = 12), # tamanho do texto da legenda
+    plot.caption = element_text(size = 12),
+    legend.position = "bottom"
   )
 
 
@@ -141,10 +151,12 @@ lapop_2018_jc16a_teste <- lapop_2018_filtrado %>%
   mutate(total_genero = sum(total_genero_jc16a),
          percentual_genero = total_genero_jc16a/total_genero*100)
 
+### 3.5.1 criar gráfico ----
+
 lapop_2018_jc16a_teste %>% ggplot()+
   aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(jc16a))+
   geom_bar(stat = "identity", position = "dodge")+
-  scale_fill_manual(values = c('#8e9b79','darkslategray4'),
+  scale_fill_manual(values = c('#8e9b79','#fc8d62'),
                     name = "Dissolucao do STF",
                     labels = c("Sim, justifica-se", "Nao, nao se justifica"))+
   facet_wrap(~ classe, ncol = 4)+
@@ -152,16 +164,47 @@ lapop_2018_jc16a_teste %>% ggplot()+
       # caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
        y = "Percentual", x = "",
        fill = "")+
-  theme_bw()+
+  theme_minimal()+
   theme(
         axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
-        axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
-        legend.title = element_text(size = 14), # tamanho do título da legenda
-        legend.text = element_text(size = 14), # tamanho do texto da legenda
+        axis.title = element_text(size = 13),  # tamanho da fonte dos títulos dos eixos
+        legend.title = element_text(size = 12), # tamanho do título da legenda
+        legend.text = element_text(size = 12),
+        legend.position = "bottom"
      #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
   )
 
-##
+## 3.6 Atitude/apoio a democracia - se um golpe militar se justifica em caso de muito crime ----
+
+lapop_2018_jc10_teste <- lapop_2018_filtrado %>%
+  filter_at(vars(jc10, classe),all_vars(!is.na(.))) %>% #
+  group_by(q1, jc10, classe) %>%
+  summarise(total_genero_jc10 = n()) %>%
+  mutate(total_genero = sum(total_genero_jc10),
+         percentual_genero = total_genero_jc10/total_genero*100)
+
+### 3.6.1 Criar gráfico ----
+
+lapop_2018_jc10_teste %>% ggplot()+
+  aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(jc10))+
+  geom_bar(stat = "identity", position = "dodge")+
+  scale_fill_manual(values = c('#8e9b79','darkslategray4'),
+                    name = "Golpe militar",
+                    labels = c("Sim, justifica-se", "Nao, nao se justifica"))+
+  facet_wrap(~ classe, ncol = 4)+
+  labs(
+    # caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
+    y = "Percentual", x = "",
+    fill = "")+
+  theme_fivethirtyeight()+
+  theme(
+    axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
+    axis.title = element_text(size = 17),  # tamanho da fonte dos títulos dos eixos
+    legend.title = element_text(size = 14), # tamanho do título da legenda
+    legend.text = element_text(size = 14), # tamanho do texto da legenda
+    #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
+  )
+
 
 
 

@@ -51,7 +51,7 @@ datafolha %>%
        caption = "Núcleo de Estudos em Representação e Democracia - UENF",
        title = "Pesquisas pré eleições do DataFolha e Resultados no 1º Turno")+
   scale_y_continuous(labels = scales::percent_format(scale = 1))
-
+2
 ## 3.2. Ibope -----
 
 ibope <- read_sheet("https://docs.google.com/spreadsheets/d/1m0D8YJokXbuCeEWbz5GZ0t8MSFmrdG2T1f8iD-xOrQ8/edit#gid=1024581996",
@@ -300,7 +300,7 @@ save(lapop_jc13,
   scale_linetype_manual(values = c("solid", "dotted"),
                         name = "Linhas",
                         labels = c("Homens", "Mulheres"))+
-    labs(title = "Variação de respaldo à golpe militar entre homens e mulheres ao longo dos anos.",
+    labs(
          x = "Ano", y = "Percentual", color = "Opções",)+
     theme_bw() +
   theme(plot.background = element_rect(fill = "white"),  # cor de fundo
