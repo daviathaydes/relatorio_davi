@@ -302,7 +302,7 @@ save(lapop_jc13,
                         labels = c("Homens", "Mulheres"))+
     labs(
          x = "Ano", y = "Percentual", color = "Opções",)+
-    theme_bw() +
+    theme_minimal() +
   theme(plot.background = element_rect(fill = "white"),  # cor de fundo
         axis.line = element_line(color = "black"),  # cor dos eixos
         axis.text = element_text(size = 15),  # tamanho da fonte dos rótulos dos eixos
@@ -401,17 +401,20 @@ lapop_jc15a <- bind_rows(lapop_jc15a_2010,
 ### 5.3.3 Gráfico de variacao (por genero) - jc15a ----
 
 ggplot(data = lapop_jc15a, aes(x = ano, y = percentual_resp_genero, group = q1)) +
-  geom_line(aes(linetype = factor(q1)), size = 1.1)+
+  geom_line(aes(linetype = factor(q1)), size = 2)+
   scale_linetype_manual(values = c("solid", "dotted"),
-                        name = "Linhas",
+                        name = "Linhas:",
                         labels = c("Homens", "Mulheres"))+
   labs(x = "Ano", y = "Percentual", color = "Opções",)+
   theme_bw()+
   theme(plot.background = element_rect(fill = "white"),  # cor de fundo
         axis.line = element_line(color = "black"),  # cor dos eixos
-        axis.text = element_text(size = 12),  # tamanho da fonte dos rótulos dos eixos
-        axis.title = element_text(size = 14),  # tamanho da fonte dos títulos dos eixos
-        plot.title = element_text(size = 16),  # tamanho da fonte do título do gráfico
+        axis.title.y = element_text(size = 25, family = "Times"),
+        axis.text.y = element_text(size = 20, family = "Times"),
+        axis.text.x = element_text(size = 20, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
+        axis.title.x = element_text(size = 25, family = "Times"),  # tamanho da fonte dos títulos dos eixos
+        legend.title = element_text(size = 27, family = "Times"), # tamanho do título da legenda
+        legend.text = element_text(size = 25, family = "Times"),
         legend.position = "bottom"  # posição da legenda
   )
 X1_01838 <- read_sav("bancos_eseb/1_01838.sav")

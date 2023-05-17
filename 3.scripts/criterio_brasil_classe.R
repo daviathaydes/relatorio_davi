@@ -10,7 +10,7 @@ pacman::p_load(tidyverse, haven, ggplot2, ggthemes, MetBrewer, googlesheets4, la
 #lapop_2014 <- read_dta("bancos_lapop/lapop_2014.dta")
 #lapop_2016 <- read_dta("bancos_lapop/lapop_2016.dta")
 lapop_2018 <- read_dta("1.bancos/bancos_lapop/lapop_2018.dta")
-lapop_2021 <- read_dta("1.bancos/bancos_lapop/lapop_2021.dta")
+#lapop_2021 <- read_dta("1.bancos/bancos_lapop/lapop_2021.dta")
 
 # 2.0 Filtrar e selecionar banco ----
 
@@ -49,10 +49,10 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
 # Vamos deixar até a classe D ou apenas até a C?
 
 lapop_2018_filtrado <- lapop_2018_filtrado %>%
-  mutate(lapop_2018_filtrado, classe = if_else(criterio_brasil %in% c(0:16), "Classe D",
-                                               ifelse(criterio_brasil %in% c(17:28), "Classe C",
-                                                      ifelse(criterio_brasil %in% c(29:44), "Classe B",
-                                                             ifelse(criterio_brasil %in% c(45:100), "Classe A", NA)))))
+  mutate(lapop_2018_filtrado, classe = if_else(criterio_brasil %in% c(0:16), "CLASSE D",
+                                               ifelse(criterio_brasil %in% c(17:28), "CLASSE C",
+                                                      ifelse(criterio_brasil %in% c(29:44), "CLASSE B",
+                                                             ifelse(criterio_brasil %in% c(45:100), "CLASSE A", NA)))))
 
 
 ### 3.3.1 Histograma da variável Renda Brasil ----
@@ -136,7 +136,7 @@ lapop_2018_pol1_teste %>%
     axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
     axis.title = element_text(size = 14),  # tamanho da fonte dos títulos dos eixos
     legend.title = element_text(size = 12), # tamanho do título da legenda
-    legend.text = element_text(size = 12), # tamanho do texto da legenda
+    legend.text = element_text(size = 11), # tamanho do texto da legenda
     plot.caption = element_text(size = 12),
     legend.position = "bottom"
   )
@@ -157,8 +157,8 @@ lapop_2018_jc16a_teste %>% ggplot()+
   aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(jc16a))+
   geom_bar(stat = "identity", position = "dodge")+
   scale_fill_manual(values = c('#8e9b79','#fc8d62'),
-                    name = "Dissolucao do STF",
-                    labels = c("Sim, justifica-se", "Nao, nao se justifica"))+
+                    name = "Dissolução do STF:",
+                    labels = c("Sim, justifica-se.", "Nao, nao se justifica."))+
   facet_wrap(~ classe, ncol = 4)+
   labs(
       # caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
@@ -166,10 +166,13 @@ lapop_2018_jc16a_teste %>% ggplot()+
        fill = "")+
   theme_minimal()+
   theme(
-        axis.text = element_text(size = 10),  # tamanho da fonte dos rótulos dos eixos
-        axis.title = element_text(size = 13),  # tamanho da fonte dos títulos dos eixos
-        legend.title = element_text(size = 12), # tamanho do título da legenda
-        legend.text = element_text(size = 12),
+        axis.title.y = element_text(size = 25, family = "Times"),
+        axis.text.y = element_text(size = 20, family = "Times"),
+        axis.text.x = element_text(size = 20, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
+        axis.title.x = element_text(size = 25, family = "Times"),  # tamanho da fonte dos títulos dos eixos
+        strip.text = element_text(size = 20, family = "Times"),
+        legend.title = element_text(size = 27, family = "Times"), # tamanho do título da legenda
+        legend.text = element_text(size = 25, family = "Times"),
         legend.position = "bottom"
      #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
   )
