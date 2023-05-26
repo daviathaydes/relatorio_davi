@@ -150,16 +150,20 @@ lapop_2018_jc16a_teste <- lapop_2018_filtrado %>%
   summarise(total_genero_jc16a = n()) %>%
   mutate(total_genero = sum(total_genero_jc16a),
          percentual_genero = total_genero_jc16a/total_genero*100)
+lapop_2018_jc16a_teste_m <- lapop_2018_jc16a_teste[1:4,]
+lapop_2018_jc16a_teste_f <- lapop_2018_jc16a_teste[9:11,]
 
+lapop_2018_jc16a_teste <- bind_rows(lapop_2018_jc16a_teste_m,
+                                    lapop_2018_jc16a_teste_f)
 ### 3.5.1 criar gráfico ----
 
 lapop_2018_jc16a_teste %>% ggplot()+
-  aes(x = as_factor(q1), y = percentual_genero, fill = as_factor(jc16a))+
+  aes(x = as_factor(classe), y = percentual_genero, fill = as_factor(q1))+
   geom_bar(stat = "identity", position = "dodge")+
   scale_fill_manual(values = c('#8e9b79','#fc8d62'),
                     name = "Dissolução do STF:",
-                    labels = c("Sim, justifica-se.", "Nao, nao se justifica."))+
-  facet_wrap(~ classe, ncol = 4)+
+                    labels = c("Homem", "Mulher"))+
+#  facet_wrap(~ classe, ncol = 4)+
   labs(
       # caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
        y = "Percentual", x = "",

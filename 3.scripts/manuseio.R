@@ -401,10 +401,10 @@ lapop_jc15a <- bind_rows(lapop_jc15a_2010,
 ### 5.3.3 Gráfico de variacao (por genero) - jc15a ----
 
 ggplot(data = lapop_jc15a, aes(x = ano, y = percentual_resp_genero, group = q1)) +
-  geom_line(aes(linetype = factor(q1)), size = 2)+
-  scale_linetype_manual(values = c("solid", "dotted"),
-                        name = "Linhas:",
-                        labels = c("Homens", "Mulheres"))+
+  geom_line(aes(color = factor(q1)), size = 2.5) +
+  scale_color_manual(values = c("#8e9b79", "#fc8d62"),
+                     name = "Linhas:",
+                     labels = c("Homens", "Mulheres"))+
   labs(x = "Ano", y = "Percentual", color = "Opções",)+
   theme_bw()+
   theme(plot.background = element_rect(fill = "white"),  # cor de fundo
