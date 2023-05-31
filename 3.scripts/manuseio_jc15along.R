@@ -12,6 +12,7 @@ lapop_2021 <- read_dta("1.bancos/bancos_lapop/lapop_2021.dta")
 
 # 2. filtrar bancos ----
 ##2.1 2010. ----
+
 lapop_2010_filtrado <- lapop_2010 %>%
   select(ed, q1, q10, r1, r3, r4, r4a, r5, r6,
          r7, r8, r12, r14, r15, r16, r18,jc15a )
@@ -24,6 +25,7 @@ lapop_2010_filtrado <- lapop_2010_filtrado %>%
                                       ifelse(ed %in% c(7, 8, 9, 10), "Ensino Médio incompleto",
                                              ifelse(ed %in% c(11, 12, 13, 14, 15), "Superior incompleto",
                                                     ifelse(ed %in% c(16, 17), "Superior completo", NA))))))
+
 ### 2.1.2 atribuir pontos ao critério brasil ----
 
 lapop_2010_filtrado <- lapop_2010_filtrado %>%
@@ -79,7 +81,9 @@ lapop_2010_filtrado %>%
 
 lapop_2012_filtrado <- lapop_2012 %>%
   select(ed, q1, q10new, r1, r3, r4, r4a, r5, r6,
-         r7, r8, r12, r14, r15, r16, r18,jc15a )
+         r7, r8, r12, r14, r15, r16, r18,jc15a ) # grande quantidade de NAs na r18.
+
+
 ### 2.2.1 recategorizar variavel de escolaridade ----
 lapop_2012_filtrado <- lapop_2012_filtrado %>%
   mutate(escolaridade = ifelse(ed %in% c(0, 1, 2, 3), "Fundamental I incompleto",
@@ -299,7 +303,7 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
                                                ifelse(criterio_brasil %in% c(17:28), "CLASSE C",
                                                       ifelse(criterio_brasil %in% c(29:44), "CLASSE B",
                                                              ifelse(criterio_brasil %in% c(45:100), "CLASSE A", NA)))))
-### 2.4.4 histograma e boxplot - renda brasil e criterio brasil de 2018 ----
+### 2.5.4 histograma e boxplot - renda brasil e criterio brasil de 2018 ----
 
 lapop_2018_filtrado %>%
   ggplot()+
@@ -330,8 +334,26 @@ lapop_2018_filtrado %>%
     #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
   )
 
-# 3. filtrar variavel e unificar bancos ----
-## 3.1 2010 - total de respostas positivas, por genero e classe. ----
+## 2.6 2021. ----
+lapop_2021_filtrado <- lapop_2021 %>%
+  select(edr, q1tb, wave, q10newt, r3, r4, r6,
+         r7, r15, r16, r18, r18n, jc15a)
+
+### 2.6.1 recategorizar variavel de escolaridade ----
+
+lapop_2018_filtrado <- lapop_2018_filtrado %>%
+  mutate(escolaridade = ifelse(ed %in% c(0, 1, 2, 3), "Fundamental I incompleto",
+                               ifelse(ed %in% c(4, 5, 6), "Fundametal II incompleto",
+                                      ifelse(ed %in% c(7, 8, 9, 10), "Ensino Médio incompleto",
+                                             ifelse(ed %in% c(11, 12, 13, 14, 15), "Superior incompleto",
+                                                    ifelse(ed %in% c(16, 17), "Superior completo", NA))))))
+
+
+
+
+
+# . filtrar variavel e unificar bancos ----
+## .1 2010 - total de respostas positivas, por genero e classe. ----
 
 lapop_2010_jc15a <- lapop_2010_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
@@ -345,7 +367,7 @@ lapop_2010_jc15a_f <- lapop_2010_jc15a[8:10,]
 lapop_2010_jc15a <- bind_rows(lapop_2010_jc15a_m,
                               lapop_2010_jc15a_f)
 
-## 3.2 2012 - total de respostas positivas, por genero e classe. ----
+## .2 2012 - total de respostas positivas, por genero e classe. ----
 lapop_2012_jc15a <- lapop_2012_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
   group_by(q1, jc15a, classe) %>%
@@ -359,7 +381,7 @@ lapop_2012_jc15a_f <- lapop_2012_jc15a[7:9,]
 lapop_2012_jc15a <- bind_rows(lapop_2012_jc15a_m,
                               lapop_2012_jc15a_f)
 
-## 3.3 2014 - total de respostas positivas, por genero e classe. ----
+## .3 2014 - total de respostas positivas, por genero e classe. ----
 
 lapop_2014_jc15a <- lapop_2014_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
@@ -373,7 +395,7 @@ lapop_2014_jc15a_f <- lapop_2014_jc15a[9:12,]
 lapop_2014_jc15a <- bind_rows(lapop_2014_jc15a_m,
                               lapop_2014_jc15a_f)
 
-## 3.4 2016  - total de respostas positivas, por genero e classe. ----
+## .4 2016  - total de respostas positivas, por genero e classe. ----
 lapop_2016_jc15a <- lapop_2016_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
   group_by(q1, jc15a, classe) %>%
@@ -385,7 +407,8 @@ lapop_2016_jc15a_m <- lapop_2016_jc15a[1:3,]
 lapop_2016_jc15a_f <- lapop_2016_jc15a[7:9,]
 lapop_2016_jc15a <- bind_rows(lapop_2016_jc15a_m,
                               lapop_2016_jc15a_f)
-## 2018 - total de respostas positivas, por genero e classe. ----
+
+## .5 2018 - total de respostas positivas, por genero e classe. ----
 lapop_2018_jc15a <- lapop_2018_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
   group_by(q1, jc15a, classe) %>%
@@ -399,12 +422,22 @@ lapop_2018_jc15a_f <- lapop_2018_jc15a[9:11,]
 lapop_2018_jc15a <- bind_rows(lapop_2018_jc15a_m,
                               lapop_2018_jc15a_f)
 
-# 4. unificar bancos. ----
+
+# . unificar bancos. ----
 lapop_total_jc15a <- bind_rows(lapop_2010_jc15a,
                                lapop_2012_jc15a,
                                lapop_2014_jc15a,
                                lapop_2016_jc15a,
                                lapop_2018_jc15a)
 
+##
+ggplot(lapop_total_jc15a, aes(x = wave, y = percentual_genero, fill = classe)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ q1) +
+  labs(x = "Ano", y = "Percentual de Respostas Positivas", fill = "Classe Social") +
+  scale_fill_manual(values = c("#A52A2A", "#B8860B", "#808000", "#BC8F8F"), labels = c("A", "B", "C", "D")) +
+  theme_minimal()
 
+
+"#A52A2A", "#B8860B", "#808000", "#BC8F8F"
 
