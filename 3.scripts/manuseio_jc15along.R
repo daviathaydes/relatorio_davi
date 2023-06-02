@@ -29,7 +29,7 @@ lapop_2010_filtrado <- lapop_2010_filtrado %>%
 ### 2.1.2 atribuir pontos ao critério brasil ----
 
 lapop_2010_filtrado <- lapop_2010_filtrado %>%
-  mutate(renda_brasil = (r1*2) + (r3*2) + r4 + r4a + (r5*4) + (r6*2) +
+  mutate(renda_brasil = (r1*1) + (r3*4) + r4 + r4a + (r5*4) + (r6*2) +
            r7 + r8 + r12 + (r14*4) + r15 + r16 +
            r18,
          pontos_escolaridade = case_when(escolaridade == "Fundamental I incompleto" ~ 0,
@@ -94,9 +94,8 @@ lapop_2012_filtrado <- lapop_2012_filtrado %>%
 ### 2.2.2 atribuir pontos ao critério brasil ----
 
 lapop_2012_filtrado <- lapop_2012_filtrado %>%
-  mutate(renda_brasil = (r1*2) + (r3*2) + r4 + r4a + (r5*4) + (r6*2) +
-           r7 + r8 + r12 + (r14*4) + r15 + r16 +
-           r18,
+  mutate(renda_brasil = (r1*1) + (r3*4) + r4 + r4a + (r5*4) + (r6*2) +
+           r7 + r8 + r12 + (r14*4) + r15 + r16,
          pontos_escolaridade = case_when(escolaridade == "Fundamental I incompleto" ~ 0,
                                          escolaridade == "Fundametal II incompleto" ~ 1,
                                          escolaridade == "Ensino Médio incompleto" ~ 2,
@@ -158,7 +157,7 @@ lapop_2014_filtrado <- lapop_2014_filtrado %>%
 ### 2.3.2 atribuir pontos ao critério brasil ----
 
 lapop_2014_filtrado <- lapop_2014_filtrado %>%
-  mutate(renda_brasil = (r1*2) + (r3*2) + r4 + r4a + (r5*4) + (r6*2) +
+  mutate(renda_brasil = (r1*2) + (r3*4) + r4 + r4a + (r5*4) + (r6*2) +
            r7 + r8 + r12 + (r14*4) + r15 + r16 +
            r18,
          pontos_escolaridade = case_when(escolaridade == "Fundamental I incompleto" ~ 0,
@@ -288,9 +287,9 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
 ### 2.5.2 atribuir pontos ao critério brasil ----
 
 lapop_2018_filtrado <- lapop_2018_filtrado %>%
-  mutate(renda_brasil = (r1*2) + (r3*2) + r4 + r4a + (r5*4) + (r6*3) +
-           (r7*2) + r8 + (r12*4) + (r14*3) + (r15*3) + (r16*3) +
-           (r18*2),
+  mutate(renda_brasil = r1 + (r3*2) + r4 + r4a + (r5*3) + (r6*2) +
+           (r7*2) + r8 + (r12*4) + (r14*3) + (r15*3) + r16 +
+           r18,
          pontos_escolaridade = case_when(escolaridade == "Fundamental I incompleto" ~ 0,
                                          escolaridade == "Fundametal II incompleto" ~ 1,
                                          escolaridade == "Ensino Médio incompleto" ~ 2,
@@ -431,13 +430,11 @@ lapop_total_jc15a <- bind_rows(lapop_2010_jc15a,
                                lapop_2018_jc15a)
 
 ##
-ggplot(lapop_total_jc15a, aes(x = wave, y = percentual_genero, fill = classe)) +
+ggplot(lapop_total_jc15a, aes(x = factor(wave), y = percentual_genero, fill = classe)) +
   geom_bar(stat = "identity", position = "dodge") +
-  facet_wrap(~ q1) +
-  labs(x = "Ano", y = "Percentual de Respostas Positivas", fill = "Classe Social") +
-  scale_fill_manual(values = c("#A52A2A", "#B8860B", "#808000", "#BC8F8F"), labels = c("A", "B", "C", "D")) +
-  theme_minimal()
+ # facet_wrap(~q1) +
+  labs(x = "Ano", y = "Percentual de Respostas Positivas") +
+  ggtitle("Variação do Percentual de Respostas Positivas por Gênero e Classe")
 
 
-"#A52A2A", "#B8860B", "#808000", "#BC8F8F"
 
