@@ -428,52 +428,22 @@ lapop_total_jc15a <- bind_rows(lapop_2010_jc15a,
                                lapop_2014_jc15a,
                                lapop_2016_jc15a,
                                lapop_2018_jc15a)
+lapop_total_jc15aA <- lapop_total_jc15a[1:12,]
+lapop_total_jc15aB <- lapop_total_jc15a[14:16,]
+lapop_total_jc15aC <- lapop_total_jc15a[18:26,]
+lapop_total_jc15aD <- lapop_total_jc15a[28:33,]
 
-##
-lapop_total_jc15a$q1 <- as.numeric(as.character(lapop_total_jc15a$q1))
-lapop_total_jc15a$classe<- as.numeric(as.character(lapop_total_jc15a$classe))
-
-
-ggplot(lapop_total_jc15a, aes(x = factor(wave), y = percentual_genero, fill = q1)) +
-geom_line(aes(linetype = classe, size = 1.1)) +
- facet_wrap(~q1) +
-  labs(x = "Ano", y = "Percentual de Respostas Positivas") +
-  ggtitle("Variação do Percentual de Respostas Positivas por Gênero e Classe")
-
-
-##
-
-ggplot(lapop_total_jc15a, aes(x = factor(wave), y = percentual_genero, fill = q1, linetype = classe))+
-  geom_bar(stat = "identity", position = "dodge")+
-  geom_line(aes(group = interaction(q1, classe)))+
-  labs(x = "Ano", y = "Percentual", fill = "Gênero", linetype = "Classe")
-
-##
-
-ggplot(lapop_total_jc15a, aes(x = wave, y = percentual_genero, color = classe, fill = q1)) +
-  geom_line(size = 2.1) +
-  geom_point() +
-  facet_wrap(~ classe)+
-  labs(x = "Ano", y = "Percentual de Respostas Positivas", color = "Classe Social", linetype = "Sexo") +
-  scale_linetype_manual(values = c("solid", "dashed"), labels = c("Homem", "Mulher")) +
-  scale_color_manual(values = c("red", "blue", "green", "purple"), labels = c("A", "B", "C", "D")) +
-  theme_bw()+
-  theme(plot.background = element_rect(fill = "white"),  # cor de fundo
-                   axis.line = element_line(color = "black"),  # cor dos eixos
-                   axis.text = element_text(size = 15),  # tamanho da fonte dos rótulos dos eixos
-                   axis.title = element_text(size = 16),  # tamanho da fonte dos títulos dos eixos
-                   plot.title = element_text(size = 16),  # tamanho da fonte do título do gráfico
-                   legend.position = "bottom"  # posição da legenda
-  )+
-  theme(legend.spacing.y = unit(0.5, "cm"))
-
+lapop_total_jc15a <- bind_rows(lapop_total_jc15aA,
+                               lapop_total_jc15aB,
+                               lapop_total_jc15aC,
+                               lapop_total_jc15aD)
 ##
 
 ggplot(lapop_total_jc15a, aes(x = wave, y = percentual_genero, group = q1, color = factor(q1))) +
   geom_line(size = 2) +
   geom_point() +
-  facet_wrap(~ classe, labeller = labeller(classe_social = c("A" = "Classe A", "B" = "Classe B", "C" = "Classe C", "D" = "Classe D"))) +
-  labs(title = "Percentuais de concordância ao fechamento do congresso pelo presidente de acordo com gênero e classe, 2010 - 2021.",
+  facet_grid(classe ~ ., labeller = labeller(classe_social = c("A" = "Classe A", "B" = "Classe B", "C" = "Classe C", "D" = "Classe D"))) +
+  labs(title = "Percentuais de concordância ao fechamento do congresso pelo presidente de acordo com gênero e classe, 2010 - 2018.",
          x = "Ano", y = "Percentual de Respostas Positivas", color = "Gênero") +
   scale_color_manual(values = c("#8e9b79", "#fc8d62"), labels = c("Homem", "Mulher")) +
   theme_bw()+
