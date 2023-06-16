@@ -351,8 +351,8 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
 
 
 
-# . filtrar variavel e unificar bancos ----
-## .1 2010 - total de respostas positivas, por genero e classe. ----
+# 3. filtrar variavel e unificar bancos ----
+## 3.1 2010 - total de respostas positivas, por genero e classe. ----
 
 lapop_2010_jc15a <- lapop_2010_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
@@ -366,7 +366,7 @@ lapop_2010_jc15a_f <- lapop_2010_jc15a[8:10,]
 lapop_2010_jc15a <- bind_rows(lapop_2010_jc15a_m,
                               lapop_2010_jc15a_f)
 
-## .2 2012 - total de respostas positivas, por genero e classe. ----
+## 3.2 2012 - total de respostas positivas, por genero e classe. ----
 lapop_2012_jc15a <- lapop_2012_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
   group_by(q1, jc15a, classe) %>%
@@ -380,7 +380,7 @@ lapop_2012_jc15a_f <- lapop_2012_jc15a[7:9,]
 lapop_2012_jc15a <- bind_rows(lapop_2012_jc15a_m,
                               lapop_2012_jc15a_f)
 
-## .3 2014 - total de respostas positivas, por genero e classe. ----
+## 3.3 2014 - total de respostas positivas, por genero e classe. ----
 
 lapop_2014_jc15a <- lapop_2014_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
@@ -394,7 +394,7 @@ lapop_2014_jc15a_f <- lapop_2014_jc15a[9:12,]
 lapop_2014_jc15a <- bind_rows(lapop_2014_jc15a_m,
                               lapop_2014_jc15a_f)
 
-## .4 2016  - total de respostas positivas, por genero e classe. ----
+## 3.4 2016  - total de respostas positivas, por genero e classe. ----
 lapop_2016_jc15a <- lapop_2016_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
   group_by(q1, jc15a, classe) %>%
@@ -407,7 +407,7 @@ lapop_2016_jc15a_f <- lapop_2016_jc15a[7:9,]
 lapop_2016_jc15a <- bind_rows(lapop_2016_jc15a_m,
                               lapop_2016_jc15a_f)
 
-## .5 2018 - total de respostas positivas, por genero e classe. ----
+## 3.5 2018 - total de respostas positivas, por genero e classe. ----
 lapop_2018_jc15a <- lapop_2018_filtrado %>%
   filter_at(vars(jc15a, classe),all_vars(!is.na(.))) %>%
   group_by(q1, jc15a, classe) %>%
@@ -422,7 +422,7 @@ lapop_2018_jc15a <- bind_rows(lapop_2018_jc15a_m,
                               lapop_2018_jc15a_f)
 
 
-# . unificar bancos. ----
+# 3.6 unificar bancos. ----
 lapop_total_jc15a <- bind_rows(lapop_2010_jc15a,
                                lapop_2012_jc15a,
                                lapop_2014_jc15a,
@@ -437,22 +437,27 @@ lapop_total_jc15a <- bind_rows(lapop_total_jc15aA,
                                lapop_total_jc15aB,
                                lapop_total_jc15aC,
                                lapop_total_jc15aD)
-##
+
+# 4. Gráfico: percentuais de respaldo ao fechamento do congresso pelo presidentes, por genero e classe. ----
 
 ggplot(lapop_total_jc15a, aes(x = wave, y = percentual_genero, group = q1, color = factor(q1))) +
-  geom_line(size = 2) +
+  geom_line(size = 1.8) +
   geom_point() +
   facet_grid(classe ~ ., labeller = labeller(classe_social = c("A" = "Classe A", "B" = "Classe B", "C" = "Classe C", "D" = "Classe D"))) +
-  labs(title = "Percentuais de concordância ao fechamento do congresso pelo presidente de acordo com gênero e classe, 2010 - 2018.",
-         x = "Ano", y = "Percentual de Respostas Positivas", color = "Gênero") +
+  labs(#title = "Percentuais de concordância ao fechamento do congresso pelo presidente de acordo com gênero e classe, 2010 - 2018.",
+         x = "Ano", y = "Percentual de Respostas Positivas", color = "Gênero", caption = "Nota: Classe A nao consta na análise por insuficiencia de dados.") +
   scale_color_manual(values = c("#8e9b79", "#fc8d62"), labels = c("Homem", "Mulher")) +
   theme_bw()+
   ylim(0, 70)+
   theme(plot.background = element_rect(fill = "white"),  # cor de fundo
                     axis.line = element_line(color = "black"),  # cor dos eixos
-                    axis.text = element_text(size = 15),  # tamanho da fonte dos rótulos dos eixos
-                    axis.title = element_text(size = 16),  # tamanho da fonte dos títulos dos eixos
-                    plot.title = element_text(size = 16),  # tamanho da fonte do título do gráfico
+                    axis.text = element_text(size = 15, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
+                    axis.title = element_text(size = 16, family = "Times"),  # tamanho da fonte dos títulos dos eixos
+                    plot.title = element_text(size = 16, family = "Times"),  # tamanho da fonte do título do gráfico
+                    plot.caption = element_text(size = 17, family = "Times"),
+                    strip.text = element_text(size = 14, family = "Times"),
+        legend.title = element_text(size = 25, family = "Times"), # tamanho do título da legenda
+        legend.text = element_text(size = 22, family = "Times"),
                     legend.position = "bottom"  # posição da legenda
   )+
   theme(legend.spacing.y = unit(0.5, "cm"))
