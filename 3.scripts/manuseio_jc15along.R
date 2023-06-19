@@ -352,6 +352,134 @@ lapop_2018_filtrado <- lapop_2018_filtrado %>%
 
 
 # 3. filtrar variavel e unificar bancos ----
+
+## 3.1 2010 - total de respostas positivas, por genero e classe. - VERSÃO LARISSA  ----
+
+lapop_2010_jc15a <- lapop_2010_filtrado %>%
+  select(jc15a, classe, q1) %>%
+  mutate(wave = 2010) %>%
+  drop_na(jc15a, classe)
+
+lapop_2012_jc15a <- lapop_2012_filtrado %>%
+  select(jc15a, classe, q1) %>%
+  mutate(wave = 2012) %>%
+  drop_na(jc15a, classe)
+
+lapop_2014_jc15a <- lapop_2014_filtrado %>%
+  select(jc15a, classe, q1) %>%
+  mutate(wave = 2014) %>%
+  drop_na(jc15a, classe)
+
+lapop_2016_jc15a <- lapop_2016_filtrado %>%
+  select(jc15a, classe, q1) %>%
+  mutate(wave = 2016) %>%
+  drop_na(jc15a, classe)
+
+lapop_2018_jc15a <- lapop_2018_filtrado %>%
+  select(jc15a, classe, q1) %>%
+  mutate(wave = 2018) %>%
+  drop_na(jc15a, classe)
+
+lapop_total_jc15a <- bind_rows(lapop_2010_jc15a,
+                               lapop_2012_jc15a,
+                               lapop_2014_jc15a,
+                               lapop_2016_jc15a,
+                               lapop_2018_jc15a)
+
+
+## 3.2 --- criar os intervalos de confiança
+
+concorda_fechar_congresso <- lapop_total_jc15a %>%
+  group_by(wave, q1, jc15a, classe) %>%
+  summarise(n_jc15a = n()) %>%
+  group_by(wave, jc15a) %>%
+  mutate(n = sum(n_jc15a,  na.rm = T),
+         p = n_jc15a/n,
+         erro = sqrt((p *(1 - p)/n)),
+         perc = p *100,
+         p_erro = erro * 100)
+
+
+concorda_fechar_congresso %>%
+  filter(classe %in% c("CLASSE B", "CLASSE C", "CLASSE D"),
+    jc15a == 1) %>%
+  ggplot(aes(x = as.numeric(wave), y = perc, group = q1, color = factor(q1)))+
+  geom_line(size = 1.8)+
+  geom_point() +
+  geom_errorbar(aes(ymin = perc - p_erro, ymax = perc + p_erro),
+                position = position_dodge(0.05), size = 1.7, width = .5)+
+  facet_grid(classe ~ .) +
+  scale_color_manual(values = c("#8e9b79", "#fc8d62"), labels = c("Homem", "Mulher")) +
+  theme_bw()+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+
+  #ylim(0, 70)+
+  labs(y = "", x ="")+
+  theme(plot.background = element_rect(fill = "white"),  # cor de fundo
+        axis.line = element_line(color = "black"),  # cor dos eixos
+        axis.text = element_text(size = 15, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
+        axis.title = element_text(size = 16, family = "Times"),  # tamanho da fonte dos títulos dos eixos
+        plot.title = element_text(size = 16, family = "Times"),  # tamanho da fonte do título do gráfico
+        plot.caption = element_text(size = 17, family = "Times"),
+        strip.text = element_text(size = 14, family = "Times"),
+        legend.title = element_text(size = 25, family = "Times"), # tamanho do título da legenda
+        legend.text = element_text(size = 22, family = "Times"),
+        legend.position = "bottom"  # posição da legenda
+  )+
+  theme(legend.spacing.y = unit(0.5, "cm"))
+
+## TENTAR INVERTER AS VARIAVEIS
+##
+
+concorda_fechar_congresso %>%
+  filter(classe %in% c("CLASSE B", "CLASSE C", "CLASSE D"),
+         jc15a == 1) %>%
+  ggplot(aes(x = as.numeric(wave), y = perc, group = classe, color = factor(classe)))+
+  geom_line(size = 1.8)+
+  geom_point() +
+  geom_errorbar(aes( ymin = perc - p_erro, ymax = perc + p_erro),
+                position = position_dodge(0.05), size = 1.7, width = .5)+
+  facet_grid(q1 ~ .) +
+  #scale_color_manual(values = c("#8e9b79", "#fc8d62"), labels = c("Homem", "Mulher")) +
+  theme_bw()+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+
+  #ylim(0, 70)+
+  labs(y = "", x ="")+
+  theme(plot.background = element_rect(fill = "white"),  # cor de fundo
+        axis.line = element_line(color = "black"),  # cor dos eixos
+        axis.text = element_text(size = 15, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
+        axis.title = element_text(size = 16, family = "Times"),  # tamanho da fonte dos títulos dos eixos
+        plot.title = element_text(size = 16, family = "Times"),  # tamanho da fonte do título do gráfico
+        plot.caption = element_text(size = 17, family = "Times"),
+        strip.text = element_text(size = 14, family = "Times"),
+        legend.title = element_text(size = 25, family = "Times"), # tamanho do título da legenda
+        legend.text = element_text(size = 22, family = "Times"),
+        legend.position = "bottom"  # posição da legenda
+  )+
+  theme(legend.spacing.y = unit(0.5, "cm"))
+
+
+
+###########################################################################
+
+
+#%>%
+  #filter(jc15a == 1) %>%
+  group_by(q1, jc15a, classe) %>%
+  summarise(total_genero_classe = n()) %>%
+  group_by(q1, jc15a) %>%
+  mutate(total_genero = sum(total_genero_classe),
+         percentual_genero_classe = total_genero_classe/total_genero*100) %>%
+  mutate(wave = 2010)
+
+
+## SEMPRE VERIFICAR A QUANTIDADE DE CASOS NO BANCOS
+lapop_2010_filtrado %>%
+  select(jc15a, q1) %>%
+  group_by(jc15a, q1) %>%
+  count()
+
+#1.157
+
 ## 3.1 2010 - total de respostas positivas, por genero e classe. ----
 
 lapop_2010_jc15a <- lapop_2010_filtrado %>%
