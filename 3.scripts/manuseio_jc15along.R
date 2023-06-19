@@ -428,7 +428,7 @@ concorda_fechar_congresso %>%
   theme(legend.spacing.y = unit(0.5, "cm"))
 
 ## TENTAR INVERTER AS VARIAVEIS
-##
+
 
 concorda_fechar_congresso %>%
   filter(classe %in% c("CLASSE B", "CLASSE C", "CLASSE D"),
@@ -462,23 +462,6 @@ concorda_fechar_congresso %>%
 ###########################################################################
 
 
-#%>%
-  #filter(jc15a == 1) %>%
-  group_by(q1, jc15a, classe) %>%
-  summarise(total_genero_classe = n()) %>%
-  group_by(q1, jc15a) %>%
-  mutate(total_genero = sum(total_genero_classe),
-         percentual_genero_classe = total_genero_classe/total_genero*100) %>%
-  mutate(wave = 2010)
-
-
-## SEMPRE VERIFICAR A QUANTIDADE DE CASOS NO BANCOS
-lapop_2010_filtrado %>%
-  select(jc15a, q1) %>%
-  group_by(jc15a, q1) %>%
-  count()
-
-#1.157
 
 ## 3.1 2010 - total de respostas positivas, por genero e classe. ----
 
