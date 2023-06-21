@@ -155,26 +155,44 @@ lapop_2018_jc16a_teste_f <- lapop_2018_jc16a_teste[9:11,]
 
 lapop_2018_jc16a_teste <- bind_rows(lapop_2018_jc16a_teste_m,
                                     lapop_2018_jc16a_teste_f)
+lapop_2018_jc16a_teste <- lapop_2018_jc16a_teste[2:7,]
+
+
+
+
+concorda_dissolucao_stf <- lapop_2018_jc16a_teste  %>%
+  group_by(q1, jc16a, classe) %>%
+  summarise(n_jc16a = n()) %>%
+  group_by(jc16a) %>%
+  mutate(n = sum(n_jc16a,  na.rm = T),
+         p = n_jc16a/n,
+         erro = sqrt((p *(1 - p)/n)),
+         perc = p *100)
+
+
+
 ### 3.5.1 criar gráfico ----
 
 lapop_2018_jc16a_teste %>% ggplot()+
   aes(x = as_factor(classe), y = percentual_genero, fill = as_factor(q1))+
   geom_bar(stat = "identity", position = "dodge")+
   scale_fill_manual(values = c('#8e9b79','#fc8d62'),
-                    name = "Dissolução do STF:",
+                    name = "Gênero",
                     labels = c("Homem", "Mulher"))+
 #  facet_wrap(~ classe, ncol = 4)+
   labs(
       # caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
-       y = "Percentual", x = "",
-       fill = "")+
+       y = "", x = "",
+       fill = "", caption = "Nota: Classe A nao consta na análise por insuficiencia de dados.")+
   theme_minimal()+
+  scale_y_continuous(labels=function(x) paste0(x,"%"))+
   theme(
         axis.title.y = element_text(size = 25, family = "Times"),
         axis.text.y = element_text(size = 20, family = "Times"),
         axis.text.x = element_text(size = 20, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
         axis.title.x = element_text(size = 25, family = "Times"),  # tamanho da fonte dos títulos dos eixos
-        strip.text = element_text(size = 20, family = "Times"),
+        plot.caption = element_text(size = 14, family = "Times"),
+         strip.text = element_text(size = 20, family = "Times"),
         legend.title = element_text(size = 27, family = "Times"), # tamanho do título da legenda
         legend.text = element_text(size = 25, family = "Times"),
         legend.position = "bottom"
