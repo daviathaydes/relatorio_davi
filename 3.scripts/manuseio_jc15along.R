@@ -404,28 +404,28 @@ concorda_fechar_congresso %>%
   filter(classe %in% c("CLASSE B", "CLASSE C", "CLASSE D"),
     jc15a == 1) %>%
   ggplot(aes(x = as.numeric(wave), y = perc, group = q1, color = factor(q1)))+
-  geom_line(size = 1.8)+
+  geom_line(size = 2.4)+
   geom_point() +
   geom_errorbar(aes(ymin = perc - p_erro, ymax = perc + p_erro),
                 position = position_dodge(0.05), size = 1.7, width = .5)+
   facet_grid(classe ~ .) +
   scale_color_manual(values = c("#8e9b79", "#fc8d62"), labels = c("Homem", "Mulher")) +
-  theme_bw()+
+  theme_minimal()+
   scale_y_continuous(labels=function(x) paste0(x,"%"))+
   #ylim(0, 70)+
-  labs(y = "", x ="")+
-  theme(plot.background = element_rect(fill = "white"),  # cor de fundo
-        axis.line = element_line(color = "black"),  # cor dos eixos
-        axis.text = element_text(size = 15, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
-        axis.title = element_text(size = 16, family = "Times"),  # tamanho da fonte dos títulos dos eixos
-        plot.title = element_text(size = 16, family = "Times"),  # tamanho da fonte do título do gráfico
-        plot.caption = element_text(size = 17, family = "Times"),
-        strip.text = element_text(size = 14, family = "Times"),
-        legend.title = element_text(size = 25, family = "Times"), # tamanho do título da legenda
-        legend.text = element_text(size = 22, family = "Times"),
-        legend.position = "bottom"  # posição da legenda
-  )+
-  theme(legend.spacing.y = unit(0.5, "cm"))
+  labs(y = "", x ="", , color = "Gênero", , caption = "Nota: Classe A não consta na análise por insuficiência de dados.")+
+  theme(
+    axis.title.y = element_text(size = 25, family = "Times"),
+    axis.text.y = element_text(size = 22, family = "Times"),
+    axis.text.x = element_text(size = 20, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
+    axis.title.x = element_text(size = 25, family = "Times"),  # tamanho da fonte dos títulos dos eixos
+    plot.caption = element_text(size = 14, family = "Times"),
+    strip.text = element_text(size = 20, family = "Times"),
+    legend.title = element_text(size = 27, family = "Times"), # tamanho do título da legenda
+    legend.text = element_text(size = 25, family = "Times"),
+    legend.position = "bottom"
+    #   plot.caption = element_text(size = 12) # tamanho do texto de rodapé
+  )
 
 ## TENTAR INVERTER AS VARIAVEIS
 

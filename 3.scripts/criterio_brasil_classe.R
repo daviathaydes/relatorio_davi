@@ -157,18 +157,20 @@ lapop_2018_jc16a_teste <- bind_rows(lapop_2018_jc16a_teste_m,
                                     lapop_2018_jc16a_teste_f)
 lapop_2018_jc16a_teste <- lapop_2018_jc16a_teste[2:7,]
 
+teste <- lapop_2018_jc16a_teste %>%
+  mutate(p_genero = percentual_genero/100,
+         erro = 1.96 * sqrt(p_genero*(1-p_genero)/total_genero_jc16a))
 
 
 
-concorda_dissolucao_stf <- lapop_2018_jc16a_teste  %>%
-  group_by(q1, jc16a, classe) %>%
-  summarise(n_jc16a = n()) %>%
-  group_by(jc16a) %>%
+concorda_dissolucao_stf <- teste  %>%
+ # group_by(q1, jc16a, classe) %>%
+  # summarise(n_jc16a = n()) %>%
+  #group_by(jc16a) %>%
   mutate(n = sum(n_jc16a,  na.rm = T),
          p = n_jc16a/n,
          erro = sqrt((p *(1 - p)/n)),
          perc = p *100)
-
 
 
 ### 3.5.1 criar gráfico ----
@@ -183,12 +185,12 @@ lapop_2018_jc16a_teste %>% ggplot()+
   labs(
       # caption = "Elaborado pelos autores com base nos dados LAPOP 2018",
        y = "", x = "",
-       fill = "", caption = "Nota: Classe A nao consta na análise por insuficiencia de dados.")+
+       fill = "", caption = "Nota: Classe A não consta na análise por insuficiência de dados.")+
   theme_minimal()+
   scale_y_continuous(labels=function(x) paste0(x,"%"))+
   theme(
         axis.title.y = element_text(size = 25, family = "Times"),
-        axis.text.y = element_text(size = 20, family = "Times"),
+        axis.text.y = element_text(size = 22, family = "Times"),
         axis.text.x = element_text(size = 20, family = "Times"),  # tamanho da fonte dos rótulos dos eixos
         axis.title.x = element_text(size = 25, family = "Times"),  # tamanho da fonte dos títulos dos eixos
         plot.caption = element_text(size = 14, family = "Times"),
